@@ -1,4 +1,0 @@
-repository "Bubbler@RavageBullets@cloud"
-  path "/"
-    br "/main"
-    co "/main"
