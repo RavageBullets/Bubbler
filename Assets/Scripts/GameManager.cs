@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour {
   public static GameManager instance;
   [SerializeField]
   private List<GameObject> PlayerList;
+  private LevelManager _lm;
 
   private void Awake() {
     if (instance == null) {
@@ -18,7 +19,8 @@ public class GameManager : MonoBehaviour {
   }
 
   public void OnPlayerJoined(PlayerInput playerInput) {
-    Debug.Log("Player Joined Yay");
+    //Debug.Log("Player '" + playerInput.user.id.ToString() + "' -  Yay");
+
     AddPlayer(playerInput.gameObject);
   }
 
@@ -29,7 +31,13 @@ public class GameManager : MonoBehaviour {
     PlayerList.Add(playerObject);
 
     playerObject.GetComponent<PlayerController>().SetHat(this.gameObject.GetComponent<PlayerColourIndicators>().GetNextHat());
-    Debug.Log("Player " + playerObject.name + " Added");
+
+    // Teleport to a spawn point.
+    _lm = FindObjectOfType<LevelManager> ();
+    if (_lm != null) {
+      playerObject.transform.position = _lm.SpawnPoints [PlayerList.Count - 1];
+      Debug.Log ("Player " + playerObject.name + " Added");
+    }
   }
 
 
@@ -42,7 +50,7 @@ public class GameManager : MonoBehaviour {
   }
 
   public void EndOfRound() {
-    if (PlayerList.Count != 0) {
+    if (PlayerList.Count > 0) {
       Debug.Log("Player " + PlayerList[0].name + " Wins!!!");
     }
 
@@ -52,7 +60,14 @@ public class GameManager : MonoBehaviour {
 
   private IEnumerator RestartLevel() {
     yield return new WaitForSeconds(3);
-    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    if (_lm != null) {
+      if(_lm.NextScene.Length == 0)
+        SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
+      else
+        SceneManager.LoadScene (_lm.NextScene);
+    } else {
+      SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
+    }
   }
 
   // Update is called once per frame

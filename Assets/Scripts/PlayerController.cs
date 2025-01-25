@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour {
-  public float MovementSpeed = 1.0f;
+  public float MovementSpeed = 50.0f;
   [SerializeField]
   private Rigidbody2D RB2D;
   private SpriteRenderer _SR;
@@ -48,5 +48,6 @@ public class PlayerController : MonoBehaviour {
   void FixedUpdate() {
     RB2D.AddForce((movement - RB2D.velocity) * Time.deltaTime, ForceMode2D.Impulse);
     // 'Move' code here
+
   }
 }
