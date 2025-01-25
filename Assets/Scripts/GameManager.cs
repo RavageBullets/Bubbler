@@ -36,13 +36,12 @@ public class GameManager : MonoBehaviour {
     }
     PlayerList.Add(playerObject);
 
-    // make the player distinctive
-    playerObject.GetComponent<PlayerController>().SetHat(this.gameObject.GetComponent<PlayerColourIndicators>().GetNextHat());
+    playerObject.GetComponent<PlayerController>().SetColor(this.gameObject.GetComponent<PlayerColourIndicators>().GetNextColor());
 
-    // Teleport new player to a spawn point.
-    _lm = FindObjectOfType<LevelManager> ();
+    // Teleport to a spawn point.
+    _lm = FindObjectOfType<LevelManager>();
     if (_lm != null) {
-      playerObject.transform.position = _lm.SpawnPoints [PlayerList.Count - 1];
+      playerObject.transform.position = _lm.SpawnPoints[PlayerList.Count - 1];
     }
   }
 
@@ -68,9 +67,9 @@ public class GameManager : MonoBehaviour {
   // called when a player dies.  When down to the last player, declare them the winner and end the roun.
   public void RemovePlayer(GameObject playerObject) {
     if (DeadPlayerList == null) {
-      DeadPlayerList = new List<GameObject> ();
+      DeadPlayerList = new List<GameObject>();
     }
-    DeadPlayerList.Add (playerObject);
+    DeadPlayerList.Add(playerObject);
     PlayerList.Remove(playerObject);
 
     if (PlayerList.Count <= 1) {
@@ -145,14 +144,14 @@ public class GameManager : MonoBehaviour {
   private IEnumerator RestartLevel () {
     yield return new WaitForSeconds (3);
 
-    int index = Random.Range (0, _lm.SpawnPoints.Count);
+    int index = Random.Range(0, _lm.SpawnPoints.Count);
     foreach (GameObject _go in DeadPlayerList) {
-      PlayerList.Add (_go);
-      _go.GetComponent<PlayerManager> ().RevivePlayer (_lm.SpawnPoints [index++]);
+      PlayerList.Add(_go);
+      _go.GetComponent<PlayerManager>().RevivePlayer(_lm.SpawnPoints[index++]);
       if (index == _lm.SpawnPoints.Count)
         index = 0;
     }
-    DeadPlayerList.Clear ();
+    DeadPlayerList.Clear();
 
   }
 

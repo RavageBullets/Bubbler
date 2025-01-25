@@ -27,27 +27,34 @@ public class PlayerController : MonoBehaviour {
     if (_SR == null) {
       _SR = GetComponent<SpriteRenderer>();
     }
-
-    if (_hat == null) {
-      _hat = transform.Find("Hat").GetComponent<SpriteRenderer>();
-    }
   }
 
-  public void SetHat(Sprite playerHat) {
-    _hat.sprite = playerHat;
+  
+  public void SetColor(Color color) {
+    transform.Find("SurroundingBubble").GetComponent<SpriteRenderer>().color = color;
   }
+
 
   public void Move(InputAction.CallbackContext context) {
     movement = context.ReadValue<Vector2>() * MovementSpeed;
     if (_SR) {
       _SR.flipX = Vector2.Dot(movement, Vector2.right) < 0;
     }
-
   }
 
   void FixedUpdate() {
     RB2D.AddForce((movement - RB2D.velocity) * Time.deltaTime, ForceMode2D.Impulse);
-    // 'Move' code here
+  }
 
+  public void Interact(InputAction.CallbackContext context) {
+    Collider2D[] colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), 2f);
+
+    foreach (Collider2D collider in colliders) {
+      IInteractable interactable = collider.gameObject.GetComponent<IInteractable>();
+      if (interactable != null) {
+        interactable.Interact(gameObject);
+        break;
+      }
+    }
   }
 }
