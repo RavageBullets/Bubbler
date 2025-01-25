@@ -6,6 +6,7 @@ public class DieAfterTimeOrCollision : MonoBehaviour {
 
   public bool dieAfterCollision = true;
   public float invulnerablePeriodSeconds = 0.01f;
+  public GameObject explosionCollider;
 
   private float timeOfInstantiation = 0;
 
@@ -25,6 +26,9 @@ public class DieAfterTimeOrCollision : MonoBehaviour {
       Time.fixedTime - timeOfInstantiation > invulnerablePeriodSeconds &&
       !collision.collider.CompareTag("Bouncy")
     ) {
+      if (explosionCollider != null){
+          explosionCollider.gameObject.GetComponent<ApplyExplosionForce>().Explode();
+      }
       Destroy(gameObject);
     }
   }
