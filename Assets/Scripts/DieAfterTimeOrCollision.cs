@@ -20,10 +20,14 @@ public class DieAfterTimeOrCollision : MonoBehaviour {
     }
   }
 
-  void OnCollisionEnter2D(Collision2D objectInCollider) {
-    if (dieAfterCollision && Time.fixedTime - timeOfInstantiation > invulnerablePeriodSeconds) {
+  void OnCollisionEnter2D(Collision2D collision) {
+    if (
+      dieAfterCollision &&
+      Time.fixedTime - timeOfInstantiation > invulnerablePeriodSeconds &&
+      !collision.collider.CompareTag("Bouncy")
+    ) {
       if (explosionCollider != null){
-        explosionCollider.GetComponent<ApplyExplosionForce>().Explode();
+        collision.GetComponent<ApplyExplosionForce>().Explode();
       }
       Destroy(gameObject);
     }

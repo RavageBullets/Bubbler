@@ -9,6 +9,8 @@ public class PlayerManager : MonoBehaviour
     public void Die (){
             this.IsDead = true;
             this.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
+    Debug.Log ("Here");
+            GameManager.instance.RemovePlayer (this.gameObject);
 
     }
 }
