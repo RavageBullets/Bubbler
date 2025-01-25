@@ -22,5 +22,6 @@ public class Teleport : MonoBehaviour {
   public void TemporarilyDisable() {
     disabled = true;
     disabledTime = Time.fixedTime;
+
   }
 }
