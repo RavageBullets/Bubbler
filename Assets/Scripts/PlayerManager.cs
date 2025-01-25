@@ -22,7 +22,7 @@ public class PlayerManager : MonoBehaviour
     }
 
   public void RevivePlayer (Vector2 spawnLocation) {
-    this.IsDead = false;
+    this.isDead = false;
     this.gameObject.GetComponent<Rigidbody2D> ().isKinematic = false;
     this.gameObject.transform.position = spawnLocation;
 
