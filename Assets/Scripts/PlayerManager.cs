@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     public bool IsDead;
+    public int score = 0;
 
     public void Die (){
             this.IsDead = true;
@@ -12,4 +13,11 @@ public class PlayerManager : MonoBehaviour
             GameManager.instance.RemovePlayer (this.gameObject);
 
     }
+
+  public void RevivePlayer (Vector2 spawnLocation) {
+    this.IsDead = false;
+    this.gameObject.GetComponent<Rigidbody2D> ().isKinematic = false;
+    this.gameObject.transform.position = spawnLocation;
+
+  }
 }
