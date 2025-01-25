@@ -19,8 +19,12 @@ public class DieAfterTimeOrCollision : MonoBehaviour {
     }
   }
 
-  void OnCollisionEnter2D() {
-    if (dieAfterCollision && Time.fixedTime - timeOfInstantiation > invulnerablePeriodSeconds) {
+  void OnCollisionEnter2D(Collision2D collision) {
+    if (
+      dieAfterCollision &&
+      Time.fixedTime - timeOfInstantiation > invulnerablePeriodSeconds &&
+      !collision.collider.CompareTag("Bouncy")
+    ) {
       Destroy(gameObject);
     }
   }
