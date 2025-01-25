@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour {
   public static GameManager instance;
   [SerializeField]
   private List<GameObject> PlayerList;
+  public List<Vector2> SpawnPoints;
 
   private void Awake() {
     if (instance == null) {
@@ -29,6 +30,8 @@ public class GameManager : MonoBehaviour {
     PlayerList.Add(playerObject);
 
     playerObject.GetComponent<PlayerController>().SetHat(this.gameObject.GetComponent<PlayerColourIndicators>().GetNextHat());
+    // Teleport to a spawn point.
+    playerObject.transform.position = SpawnPoints [PlayerList.Count - 1];
     Debug.Log("Player " + playerObject.name + " Added");
   }
 
