@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour {
   }
 
   public void OnPlayerJoined(PlayerInput playerInput) {
-    //Debug.Log("Player '" + playerInput.user.id.ToString() + "' -  Yay");
+    Debug.Log("Player '" + playerInput.currentControlScheme + "' -  Yay");
 
     AddPlayer(playerInput.gameObject);
   }
@@ -36,7 +36,6 @@ public class GameManager : MonoBehaviour {
     _lm = FindObjectOfType<LevelManager> ();
     if (_lm != null) {
       playerObject.transform.position = _lm.SpawnPoints [PlayerList.Count - 1];
-      Debug.Log ("Player " + playerObject.name + " Added");
     }
   }
 
