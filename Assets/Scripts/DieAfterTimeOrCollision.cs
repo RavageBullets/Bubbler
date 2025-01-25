@@ -27,7 +27,7 @@ public class DieAfterTimeOrCollision : MonoBehaviour {
       !collision.collider.CompareTag("Bouncy")
     ) {
       if (explosionCollider != null){
-        collision.GetComponent<ApplyExplosionForce>().Explode();
+          explosionCollider.gameObject.GetComponent<ApplyExplosionForce>().Explode();
       }
       Destroy(gameObject);
     }
