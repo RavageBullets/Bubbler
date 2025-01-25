@@ -61,7 +61,10 @@ public class GameManager : MonoBehaviour {
   private IEnumerator RestartLevel() {
     yield return new WaitForSeconds(3);
     if (_lm != null) {
-      SceneManager.LoadScene (_lm.NextScene);
+      if(_lm.NextScene.Length == 0)
+        SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
+      else
+        SceneManager.LoadScene (_lm.NextScene);
     } else {
       SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
     }
