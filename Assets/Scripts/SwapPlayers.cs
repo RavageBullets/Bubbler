@@ -13,7 +13,6 @@ public class SwapPlayers : MonoBehaviour, IInteractable {
       GameObject playerA = players[i];
       GameObject playerB = players[i + 1];
 
-
       Rigidbody2D rigidbodyA = playerA.GetComponent<Rigidbody2D>();
       Rigidbody2D rigidbodyB = playerB.GetComponent<Rigidbody2D>();
 
