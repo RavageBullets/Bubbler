@@ -29,12 +29,6 @@ public class PlayerController : MonoBehaviour {
     }
   }
 
-  
-  public void SetColor(Color color) {
-    transform.Find("SurroundingBubble").GetComponent<SpriteRenderer>().color = color;
-  }
-
-
   public void Move(InputAction.CallbackContext context) {
     movement = context.ReadValue<Vector2>() * MovementSpeed;
     if (_SR) {
@@ -57,4 +51,5 @@ public class PlayerController : MonoBehaviour {
       }
     }
   }
+
 }
