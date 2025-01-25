@@ -1,9 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class ShootPushingBubble : MonoBehaviour {
-
-  public Rigidbody2D projectile;
+public abstract class AbstractWeapon : MonoBehaviour {
   public PlayerInput playerInput;
   public float fireDelaySeconds = 0.5f;
   public float projectileSpeed = 4f;
@@ -16,14 +14,13 @@ public class ShootPushingBubble : MonoBehaviour {
     if (Time.fixedTime - timeOfLastFire < fireDelaySeconds) return;
     timeOfLastFire = Time.fixedTime;
 
-    Rigidbody2D instantiatedProjectile = Instantiate(projectile, transform.position, transform.parent.rotation);
-    Vector3 eulerAngles = transform.parent.rotation.eulerAngles;
-
-    instantiatedProjectile.velocity = ConvertDegAngleToUnitVector(eulerAngles.z) * projectileSpeed;
+    Fire();
   }
 
 
-  private Vector2 ConvertDegAngleToUnitVector(float angle) {
+  public abstract void Fire();
+
+  protected Vector2 ConvertDegAngleToUnitVector(float angle) {
     return (Vector2)(Quaternion.Euler(0, 0, angle) * Vector2.right);
   }
 
