@@ -20,7 +20,7 @@ public abstract class AbstractWeapon : MonoBehaviour {
 
   public abstract void Fire();
 
-  protected Vector2 ConvertDegAngleToUnitVector(float angle) {
+  static public Vector2 ConvertDegAngleToUnitVector(float angle) {
     return (Vector2)(Quaternion.Euler(0, 0, angle) * Vector2.right);
   }
 
