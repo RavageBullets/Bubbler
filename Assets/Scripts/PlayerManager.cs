@@ -24,6 +24,7 @@ public class PlayerManager : MonoBehaviour
   public void RevivePlayer (Vector2 spawnLocation) {
     this.isDead = false;
     this.gameObject.GetComponent<Rigidbody2D> ().isKinematic = false;
+    this.gameObject.GetComponent<Rigidbody2D> ().bodyType = RigidbodyType2D.Dynamic;
     this.gameObject.transform.position = spawnLocation;
 
   }
