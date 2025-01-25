@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
   public static GameManager instance;
+  [SerializeField]
   private List<GameObject> PlayerList;
 
   private void Awake ()
@@ -44,6 +46,13 @@ public class GameManager : MonoBehaviour
 
   public void EndOfRound () {
     Debug.Log ("Player " + PlayerList [0].name + " Wins!!!");
+    StartCoroutine ("RestartLevel");
+  }
+
+
+  private IEnumerator RestartLevel () {
+    yield return new WaitForSeconds (3); 
+    SceneManager.LoadScene (SceneManager.GetActiveScene().name);
   }
 
     // Update is called once per frame
