@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class DieAfterTimeOrCollision : MonoBehaviour {
 
-
   public float timeToLiveSeconds = 2f;
 
   public bool dieAfterCollision = true;
