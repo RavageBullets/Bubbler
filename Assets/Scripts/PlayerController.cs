@@ -42,12 +42,21 @@ public class PlayerController : MonoBehaviour {
     if (_SR) {
       _SR.flipX = Vector2.Dot(movement, Vector2.right) < 0;
     }
-
   }
 
   void FixedUpdate() {
     RB2D.AddForce((movement - RB2D.velocity) * Time.deltaTime, ForceMode2D.Impulse);
-    // 'Move' code here
+  }
 
+  public void Interact(InputAction.CallbackContext context) {
+    Collider2D[] colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), 2f);
+
+    foreach (Collider2D collider in colliders) {
+      IInteractable interactable = collider.gameObject.GetComponent<IInteractable>();
+      if (interactable != null) {
+        interactable.Interact(gameObject);
+        break;
+      }
+    }
   }
 }

@@ -6,6 +6,7 @@ public class PlayerManager : MonoBehaviour
 {
     public bool isDead;
     public ParticleSystem deathParticles;
+    public int score = 0;
 
     public void Die (){
         var particles = Instantiate(deathParticles, this.transform.position, this.transform.rotation);
@@ -19,4 +20,11 @@ public class PlayerManager : MonoBehaviour
         }
         GameManager.instance.RemovePlayer(this.gameObject);
     }
+
+  public void RevivePlayer (Vector2 spawnLocation) {
+    this.IsDead = false;
+    this.gameObject.GetComponent<Rigidbody2D> ().isKinematic = false;
+    this.gameObject.transform.position = spawnLocation;
+
+  }
 }

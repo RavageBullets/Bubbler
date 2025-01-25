@@ -12,19 +12,6 @@ public class WeaponInventory : MonoBehaviour {
     HoldCurrentWeapon();
   }
 
-  public void PickUpCollidingWeapon(InputAction.CallbackContext context) {
-    Collider2D[] colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), 2f);
-
-    foreach (Collider2D collider in colliders) {
-      CollectableWeapon collectableWeapon = collider.gameObject.GetComponent<CollectableWeapon>();
-      if (collectableWeapon != null) {
-        ChangeWeapon(collectableWeapon.weapon);
-        Destroy(collectableWeapon.gameObject);
-        break;
-      }
-    }
-  }
-
   public void ChangeWeapon(AbstractWeapon newWeapon) {
     DropCurrentWeapon();
     currentWeapon = newWeapon;

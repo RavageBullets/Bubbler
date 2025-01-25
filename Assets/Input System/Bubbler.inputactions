@@ -33,7 +33,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Collect",
+                    "name": "Interact",
                     "type": "Button",
                     "id": "9b285558-fb4b-4795-a902-de46a27abdf3",
                     "expectedControlType": "Button",
@@ -270,7 +270,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad;Joystick",
-                    "action": "Collect",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -281,7 +281,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Collect",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
