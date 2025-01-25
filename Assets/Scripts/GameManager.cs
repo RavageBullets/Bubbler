@@ -42,7 +42,10 @@ public class GameManager : MonoBehaviour {
   }
 
   public void EndOfRound() {
-    Debug.Log("Player " + PlayerList[0].name + " Wins!!!");
+    if (PlayerList.Count != 0) {
+      Debug.Log("Player " + PlayerList[0].name + " Wins!!!");
+    }
+
     StartCoroutine("RestartLevel");
   }
 
