@@ -2,11 +2,18 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public abstract class AbstractWeapon : MonoBehaviour {
+
+  [SerializeField] private Transform gunAnchorL;
+  [SerializeField] private Transform gunAnchorR;
+  public Transform GunAnchorL { get { return gunAnchorL;}}
+  public Transform GunAnchorR { get { return gunAnchorR;}}
   public PlayerInput playerInput;
   public float fireDelaySeconds = 0.5f;
   public float projectileSpeed = 4f;
 
   private float timeOfLastFire = 0;
+
+
 
   public void Update() {
     if (!playerInput.actions["Fire"].IsPressed()) return;
