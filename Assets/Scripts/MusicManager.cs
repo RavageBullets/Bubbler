@@ -25,21 +25,35 @@ public class MusicManager : MonoBehaviour {
     private void Start() {
         SceneManager.activeSceneChanged += ChangedActiveScene;
         if (SceneManager.GetActiveScene().name == "Main Menu") {
-            this.GetComponent<AudioSource>().clip = this.prepostClip;
+            this.GetComponent<AudioSource>().clip = this.titleClip;
             this.GetComponent<AudioSource>().Play();
         }
     }
     private void ChangedActiveScene(Scene current, Scene next) {
         string currentName = current.name;
         string nextName = next.name;
+        AudioSource _as = Instance.GetComponent<AudioSource>();
         if (nextName.Substring(0, 5) == "Level" || nextName.Substring(0, 5) == "Arena"
         ) {
-            this.GetComponent<AudioSource>().clip = battleClip;
-            this.GetComponent<AudioSource>().Play();
+            _as.loop = true;
+            _as.clip = battleClip;
+            _as.Play();
         } else if (nextName == "Main Menu") {
-            this.GetComponent<AudioSource>().clip = this.prepostClip;
-            this.GetComponent<AudioSource>().Play();
+            _as.loop = true;
+            _as.clip = this.prepostClip;
+            _as.Play();
+        } else if (nextName == "Join Menu") {
+            _as.loop = true;
+            _as.clip = this.prepostClip;
+            _as.Play();
         }
+    }
+
+    public static void PlayVictory() {
+        AudioSource _as = Instance.GetComponent<AudioSource>();
+        _as.loop = false;
+        _as.clip = Instance.defeatClip;
+        _as.Play();
     }
 
 }

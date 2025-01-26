@@ -195,6 +195,7 @@ public class GameManager : MonoBehaviour {
       playerDisplay.gameObject.SetActive(true);
       playerDisplay.Find("Bubble").GetComponent<Image>().color = color;
       playerDisplay.Find("Winner").GetComponent<TMP_Text>().color = color;
+      MusicManager.PlayVictory();
     }
   }
 }
