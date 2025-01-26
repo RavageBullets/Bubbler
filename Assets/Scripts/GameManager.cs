@@ -74,6 +74,19 @@ public class GameManager : MonoBehaviour {
     }
   }
 
+  public void ContinueRound ()
+  {
+    _lm = FindObjectOfType<LevelManager> ();
+    if (_lm.ready) {
+      // make sure all players are in appropriate starting places and ready to go.
+      foreach (GameObject player in PlayerList) {
+        player.GetComponent<PlayerManager> ().SetEnabled (true);
+      }
+    } else {
+      Debug.Log ("Bugger");
+    }
+  }
+
   // called when a player dies.  When down to the last player, declare them the winner and end the round
   public void RemovePlayer(GameObject playerObject) {
     DeadPlayerList ??= new List<GameObject>();
@@ -142,15 +155,19 @@ public class GameManager : MonoBehaviour {
   private IEnumerator RestartLevel() {
     yield return new WaitForSeconds(3);
 
-    int index = Random.Range(0, _lm.SpawnPoints.Count);
+    int index = Random.Range (0, _lm.SpawnPoints.Count);
+
     foreach (GameObject _go in DeadPlayerList) {
-      PlayerList.Add(_go);
-      _go.GetComponent<PlayerManager>().ResetPlayer();
-      _go.transform.position = _lm.SpawnPoints[index++];
+      PlayerList.Add (_go);
+      PlayerManager manager = _go.GetComponent<PlayerManager> ();
+      manager.ResetPlayer ();
+      _go.transform.position = _lm.SpawnPoints [index++];
+      _go.GetComponent<Rigidbody2D> ().velocity = Vector2.zero;
       if (index == _lm.SpawnPoints.Count)
         index = 0;
     }
-    DeadPlayerList.Clear();
+    DeadPlayerList.Clear ();
+    ContinueRound ();
   }
 
 }
