@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
 public class GameManager : MonoBehaviour {
@@ -12,6 +14,8 @@ public class GameManager : MonoBehaviour {
   [SerializeField]
   private List<GameObject> DeadPlayerList;
   private LevelManager _lm;
+
+  public GameObject gameOverScreen;
 
   public int scoreUntilNextLevel = 1;
 
@@ -81,23 +85,25 @@ public class GameManager : MonoBehaviour {
     PlayerList.Remove(playerObject);
 
     if (PlayerList.Count <= 1) {
-      EndOfRound();
+      StartCoroutine("EndOfRound");
     }
   }
 
   // One round of combat till the last player standing has finished.
   // Prepare for the next round.
-  public void EndOfRound() {
+  public IEnumerator EndOfRound() {
     bool endLevel = false;
-    // declare the winner and decide if there's been enough rounds and the game/level should be finished.
+    PauseAllPhysics();
+    ShowRoundOverScreen(PlayerList.Count > 0 ? PlayerList[0] : null);
+
     if (PlayerList.Count > 0) {
-      Debug.Log("Player " + PlayerList[0].name + " Wins!!!");
       PlayerList[0].GetComponent<PlayerManager>().score += 1;
-      Debug.Log("Their score is: " + PlayerList[0].GetComponent<PlayerManager>().score);
       if (PlayerList[0].GetComponent<PlayerManager>().score >= scoreUntilNextLevel) {
         endLevel = true;
       }
     }
+
+    yield return new WaitForSeconds(3);
 
     if (endLevel) {
       StartCoroutine("NextLevel");
@@ -107,9 +113,6 @@ public class GameManager : MonoBehaviour {
 
   // Had enough rounds in this scene, time to move to the next one (if it's specified)
   public IEnumerator NextLevel() {
-    // Pause so the winner can admire their achievement.
-    // yield return new WaitForSeconds(3);
-
     // Begin resetting the dead players
     foreach (GameObject _go in DeadPlayerList) {
       PlayerList.Add(_go);
@@ -151,6 +154,29 @@ public class GameManager : MonoBehaviour {
         index = 0;
     }
     DeadPlayerList.Clear();
+  }
+
+  private void PauseAllPhysics() {
+    Rigidbody2D[] rigidbodies = FindObjectsOfType<Rigidbody2D>();
+
+    foreach (Rigidbody2D rigidbody in rigidbodies) {
+      rigidbody.Sleep();
+    }
+  }
+
+  private void ShowRoundOverScreen(GameObject winner) {
+    GameObject gameOver = Instantiate(gameOverScreen);
+
+    if (winner != null) {
+      var canvas = gameOver.transform.Find("Canvas");
+      var playerDisplay = canvas.Find("PlayerDisplay");
+
+      var color = winner.transform.Find("SurroundingBubble").GetComponent<SpriteRenderer>().color;
+
+      playerDisplay.gameObject.SetActive(true);
+      playerDisplay.Find("Bubble").GetComponent<Image>().color = color;
+      playerDisplay.Find("Winner").GetComponent<TMP_Text>().color = color;
+    }
   }
 
 }

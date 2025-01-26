@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class StartGamePortal : MonoBehaviour {
@@ -12,8 +11,6 @@ public class StartGamePortal : MonoBehaviour {
         playerCount++;
       }
     }
-
-    Debug.Log(GameManager.instance.PlayerList);
 
     if (playerCount == GameManager.instance.PlayerList.Count) {
       GameManager.instance.StartCoroutine("NextLevel");
