@@ -18,5 +18,7 @@ public class ShotgunGun : AbstractWeapon {
       projectiles[i] = Instantiate(projectile, transform.position, transform.parent.rotation);
       projectiles[i].velocity = ConvertDegAngleToUnitVector(startAngle + angleIncrement * i) * projectileSpeed;
     }
+
+    GetComponent<AudioSource>()?.Play();
   }
 }

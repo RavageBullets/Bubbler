@@ -12,16 +12,16 @@ public class PlayerManager : MonoBehaviour {
 
     var particles = Instantiate(deathParticles, this.transform.position, this.transform.rotation);
     particles.Play();
+
     this.isDead = true;
-    this.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
+    this.gameObject.GetComponent<Rigidbody2D>().Sleep();
     SetEnabled(false);
     GameManager.instance.RemovePlayer(this.gameObject);
   }
 
   public void ResetPlayer() {
     isDead = false;
-    gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
-    gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+    gameObject.GetComponent<Rigidbody2D>().WakeUp();
     SetEnabled(false);
   }
 

@@ -16,6 +16,7 @@ public class DieAfterTimeOrCollision : MonoBehaviour {
 
   void Update() {
     if (Time.fixedTime - timeOfInstantiation > timeToLiveSeconds) {
+      SfxManager.PlayPop();
       Destroy(gameObject);
     }
   }
@@ -30,6 +31,8 @@ public class DieAfterTimeOrCollision : MonoBehaviour {
           explosionCollider.gameObject.GetComponent<ApplyExplosionForce>().Explode();
       }
       Destroy(gameObject);
+      Debug.Log("Die by Popping");
+      SfxManager.PlayTinyImpact();
     }
   }
 }

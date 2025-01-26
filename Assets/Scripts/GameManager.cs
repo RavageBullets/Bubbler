@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
 public class GameManager : MonoBehaviour {
@@ -12,6 +14,8 @@ public class GameManager : MonoBehaviour {
   [SerializeField]
   private List<GameObject> DeadPlayerList;
   private LevelManager _lm;
+
+  public GameObject gameOverScreen;
 
   public int scoreUntilNextLevel = 1;
 
@@ -74,6 +78,19 @@ public class GameManager : MonoBehaviour {
     }
   }
 
+  public void ContinueRound ()
+  {
+    _lm = FindObjectOfType<LevelManager> ();
+    if (_lm.ready) {
+      // make sure all players are in appropriate starting places and ready to go.
+      foreach (GameObject player in PlayerList) {
+        player.GetComponent<PlayerManager> ().SetEnabled (true);
+      }
+    } else {
+      Debug.Log ("Bugger");
+    }
+  }
+
   // called when a player dies.  When down to the last player, declare them the winner and end the round
   public void RemovePlayer(GameObject playerObject) {
     DeadPlayerList ??= new List<GameObject>();
@@ -81,23 +98,25 @@ public class GameManager : MonoBehaviour {
     PlayerList.Remove(playerObject);
 
     if (PlayerList.Count <= 1) {
-      EndOfRound();
+      StartCoroutine("EndOfRound");
     }
   }
 
   // One round of combat till the last player standing has finished.
   // Prepare for the next round.
-  public void EndOfRound() {
+  public IEnumerator EndOfRound() {
     bool endLevel = false;
-    // declare the winner and decide if there's been enough rounds and the game/level should be finished.
+    PauseAllPhysics();
+    ShowRoundOverScreen(PlayerList.Count > 0 ? PlayerList[0] : null);
+
     if (PlayerList.Count > 0) {
-      Debug.Log("Player " + PlayerList[0].name + " Wins!!!");
       PlayerList[0].GetComponent<PlayerManager>().score += 1;
-      Debug.Log("Their score is: " + PlayerList[0].GetComponent<PlayerManager>().score);
       if (PlayerList[0].GetComponent<PlayerManager>().score >= scoreUntilNextLevel) {
         endLevel = true;
       }
     }
+
+    yield return new WaitForSeconds(3);
 
     if (endLevel) {
       StartCoroutine("NextLevel");
@@ -107,9 +126,6 @@ public class GameManager : MonoBehaviour {
 
   // Had enough rounds in this scene, time to move to the next one (if it's specified)
   public IEnumerator NextLevel() {
-    // Pause so the winner can admire their achievement.
-    // yield return new WaitForSeconds(3);
-
     // Begin resetting the dead players
     foreach (GameObject _go in DeadPlayerList) {
       PlayerList.Add(_go);
@@ -142,15 +158,42 @@ public class GameManager : MonoBehaviour {
   private IEnumerator RestartLevel() {
     yield return new WaitForSeconds(3);
 
-    int index = Random.Range(0, _lm.SpawnPoints.Count);
+    int index = Random.Range (0, _lm.SpawnPoints.Count);
+
     foreach (GameObject _go in DeadPlayerList) {
-      PlayerList.Add(_go);
-      _go.GetComponent<PlayerManager>().ResetPlayer();
-      _go.transform.position = _lm.SpawnPoints[index++];
+      PlayerList.Add (_go);
+      PlayerManager manager = _go.GetComponent<PlayerManager> ();
+      manager.ResetPlayer ();
+      _go.transform.position = _lm.SpawnPoints [index++];
+      _go.GetComponent<Rigidbody2D> ().velocity = Vector2.zero;
       if (index == _lm.SpawnPoints.Count)
         index = 0;
     }
-    DeadPlayerList.Clear();
+    DeadPlayerList.Clear ();
+    ContinueRound ();
+  }
+
+  private void PauseAllPhysics() {
+    Rigidbody2D[] rigidbodies = FindObjectsOfType<Rigidbody2D>();
+
+    foreach (Rigidbody2D rigidbody in rigidbodies) {
+      rigidbody.Sleep();
+    }
+  }
+
+  private void ShowRoundOverScreen(GameObject winner) {
+    GameObject gameOver = Instantiate(gameOverScreen);
+
+    if (winner != null) {
+      var canvas = gameOver.transform.Find("Canvas");
+      var playerDisplay = canvas.Find("PlayerDisplay");
+
+      var color = winner.transform.Find("SurroundingBubble").GetComponent<SpriteRenderer>().color;
+
+      playerDisplay.gameObject.SetActive(true);
+      playerDisplay.Find("Bubble").GetComponent<Image>().color = color;
+      playerDisplay.Find("Winner").GetComponent<TMP_Text>().color = color;
+    }
   }
 
 }
