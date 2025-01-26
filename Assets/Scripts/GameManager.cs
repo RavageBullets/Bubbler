@@ -10,6 +10,8 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour {
   public static GameManager instance;
   [SerializeField]
+  public PlayerAvatarList avatarList;
+  [SerializeField]
   public List<GameObject> PlayerList;
   [SerializeField]
   private List<GameObject> DeadPlayerList;
@@ -52,6 +54,8 @@ public class GameManager : MonoBehaviour {
     PlayerList.Add(player);
 
     var playerManager = player.GetComponent<PlayerManager>();
+    PlayerAvatar newAvatar = Instantiate(avatarList.playerAvatars[PlayerList.Count % 2], Vector3.zero, Quaternion.identity);
+    playerManager.SetAvatar(newAvatar);
     player.transform.position = _lm.SpawnPoints[PlayerList.Count - 1 % _lm.SpawnPoints.Count];
     playerManager.SetColor(gameObject.GetComponent<PlayerColourIndicators>().GetNextColor());
 
