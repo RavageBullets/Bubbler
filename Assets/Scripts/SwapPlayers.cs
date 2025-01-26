@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class SwapPlayers : MonoBehaviour, IInteractable {
@@ -6,12 +7,13 @@ public class SwapPlayers : MonoBehaviour, IInteractable {
 
   public void Interact(GameObject player) {
     GameObject[] players = Shuffle(GameObject.FindGameObjectsWithTag("Player"));
+    GameObject[] alivePlayers = players.Where(player => !player.GetComponent<PlayerManager>().isDead).ToArray();
 
-    for (int i = 0; i < players.Length; i += 2) {
-      if (i + 1 >= players.Length) break;
+    for (int i = 0; i < alivePlayers.Length; i += 2) {
+      if (i + 1 >= alivePlayers.Length) break;
 
-      GameObject playerA = players[i];
-      GameObject playerB = players[i + 1];
+      GameObject playerA = alivePlayers[i];
+      GameObject playerB = alivePlayers[i + 1];
 
       Rigidbody2D rigidbodyA = playerA.GetComponent<Rigidbody2D>();
       Rigidbody2D rigidbodyB = playerB.GetComponent<Rigidbody2D>();
