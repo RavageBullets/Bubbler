@@ -5,25 +5,24 @@ public class PlayerManager : MonoBehaviour {
   public ParticleSystem deathParticles;
   public int score = 0;
 
-
+  private bool canDie = true;
 
   public void Die() {
+    if (!canDie) return;
+
     var particles = Instantiate(deathParticles, this.transform.position, this.transform.rotation);
     particles.Play();
     this.isDead = true;
     this.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
-    SpriteRenderer[] spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
-    foreach (var sr in spriteRenderers) {
-      sr.enabled = false;
-    }
+    SetEnabled(false);
     GameManager.instance.RemovePlayer(this.gameObject);
   }
 
-  public void RevivePlayer(Vector2 spawnLocation) {
-    this.isDead = false;
-    this.gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
-    this.gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-    this.gameObject.transform.position = spawnLocation;
+  public void ResetPlayer() {
+    isDead = false;
+    gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
+    gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+    SetEnabled(false);
   }
 
   public void SetColor(Color color) {
@@ -31,6 +30,7 @@ public class PlayerManager : MonoBehaviour {
   }
 
   public void SetEnabled(bool active) {
+    canDie = active;
     foreach (Transform child in transform) {
       child.gameObject.SetActive(active);
     }

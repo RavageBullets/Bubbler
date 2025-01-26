@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour {
   private List<GameObject> DeadPlayerList;
   private LevelManager _lm;
 
+  public int scoreUntilNextLevel = 1;
+
   // minimal singleton pattern
   private void Awake() {
     if (instance == null) {
@@ -62,8 +64,10 @@ public class GameManager : MonoBehaviour {
       int i = 0;
       foreach (GameObject player in PlayerList) {
         player.transform.position = _lm.SpawnPoints[i++];
+        Debug.Log(player);
         player.GetComponent<PlayerManager>().SetEnabled(true);
         player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        player.GetComponentInChildren<WeaponInventory>().SetWeapon(_lm.defaultWeapon);
       }
     } else {
       Debug.Log("Bugger");
@@ -72,9 +76,7 @@ public class GameManager : MonoBehaviour {
 
   // called when a player dies.  When down to the last player, declare them the winner and end the round
   public void RemovePlayer(GameObject playerObject) {
-    if (DeadPlayerList == null) {
-      DeadPlayerList = new List<GameObject>();
-    }
+    DeadPlayerList ??= new List<GameObject>();
     DeadPlayerList.Add(playerObject);
     PlayerList.Remove(playerObject);
 
@@ -92,7 +94,7 @@ public class GameManager : MonoBehaviour {
       Debug.Log("Player " + PlayerList[0].name + " Wins!!!");
       PlayerList[0].GetComponent<PlayerManager>().score += 1;
       Debug.Log("Their score is: " + PlayerList[0].GetComponent<PlayerManager>().score);
-      if (PlayerList[0].GetComponent<PlayerManager>().score >= 4) {
+      if (PlayerList[0].GetComponent<PlayerManager>().score >= scoreUntilNextLevel) {
         endLevel = true;
       }
     }
@@ -111,36 +113,28 @@ public class GameManager : MonoBehaviour {
     // Begin resetting the dead players
     foreach (GameObject _go in DeadPlayerList) {
       PlayerList.Add(_go);
-      // Move the players way up presumably out of sight.
-      _go.GetComponent<PlayerManager>().RevivePlayer(Vector2.up * 10000);
     }
     DeadPlayerList.Clear();
 
-    // reinitialise all the players.
     foreach (GameObject _go in PlayerList) {
-      _go.GetComponent<PlayerManager>().score = 0;
+      PlayerManager manager = _go.GetComponent<PlayerManager>();
+      manager.ResetPlayer();
+      manager.score = 0;
     }
 
     // Determine which scene to load.
     // As this object isn't getting destroyed, after loading the scene, wait a second,then reset things for a new set of rounds.
-    if (_lm != null) {
-      if (_lm.NextScene.Length == 0) {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        yield return new WaitForSeconds(1);
-        BeginNewRound();
-      } else {
-        string next = _lm.NextScene;
-        _lm = null; // Set to null so we know to load the new spawn points in the next scene
-        SceneManager.LoadScene(next);
-        yield return new WaitForSeconds(1);
+    SceneManager.LoadScene(GetSceneToLoad());
+    yield return new WaitForSeconds(1);
+    BeginNewRound();
+  }
 
-        BeginNewRound();
-      }
-    } else {
-      SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-      yield return new WaitForSeconds(1);
-      BeginNewRound();
+  private string GetSceneToLoad() {
+    if (_lm == null || _lm.NextScene.Length == 0) {
+      return SceneManager.GetActiveScene().name;
     }
+
+    return _lm.NextScene;
   }
 
   // Hasn't been enough rounds so after a few seconds to display scores / etc, reset the level
@@ -151,7 +145,8 @@ public class GameManager : MonoBehaviour {
     int index = Random.Range(0, _lm.SpawnPoints.Count);
     foreach (GameObject _go in DeadPlayerList) {
       PlayerList.Add(_go);
-      _go.GetComponent<PlayerManager>().RevivePlayer(_lm.SpawnPoints[index++]);
+      _go.GetComponent<PlayerManager>().ResetPlayer();
+      _go.transform.position = _lm.SpawnPoints[index++];
       if (index == _lm.SpawnPoints.Count)
         index = 0;
     }

@@ -8,6 +8,8 @@ public class LevelManager : MonoBehaviour {
 
   public bool allowsPlayersToJoin = false;
 
+  public AbstractWeapon defaultWeapon;
+
   void Start() {
     SpawnPoints.Clear();
     GameObject[] spawnPointObjects = GameObject.FindGameObjectsWithTag("SpawnPoint");
