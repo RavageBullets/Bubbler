@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour {
   [SerializeField]
   private SpriteRenderer _hat;
 
+  public bool movementDisabled = false;
+
   // Start is called before the first frame update
   void Start() {
     if (RB2D == null) {
@@ -29,13 +31,12 @@ public class PlayerController : MonoBehaviour {
     }
   }
 
-  
-  public void SetColor(Color color) {
-    transform.Find("SurroundingBubble").GetComponent<SpriteRenderer>().color = color;
-  }
-
-
   public void Move(InputAction.CallbackContext context) {
+    if (movementDisabled) {
+      movement = Vector2.zero;
+      return;
+    }
+
     movement = context.ReadValue<Vector2>() * MovementSpeed;
     if (_SR) {
       _SR.flipX = Vector2.Dot(movement, Vector2.right) < 0;
@@ -47,6 +48,8 @@ public class PlayerController : MonoBehaviour {
   }
 
   public void Interact(InputAction.CallbackContext context) {
+    if (movementDisabled) return;
+
     Collider2D[] colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), 2f);
 
     foreach (Collider2D collider in colliders) {
@@ -57,4 +60,5 @@ public class PlayerController : MonoBehaviour {
       }
     }
   }
+
 }

@@ -12,6 +12,11 @@ public class WeaponInventory : MonoBehaviour {
     HoldCurrentWeapon();
   }
 
+  public void SetWeapon(AbstractWeapon newWeapon) {
+    currentWeapon = newWeapon;
+    HoldCurrentWeapon();
+  }
+
   public void ChangeWeapon(AbstractWeapon newWeapon) {
     DropCurrentWeapon();
     currentWeapon = newWeapon;

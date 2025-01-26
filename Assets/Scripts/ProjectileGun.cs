@@ -9,6 +9,10 @@ public class ProjectileGun : AbstractWeapon {
     Vector3 eulerAngles = transform.parent.rotation.eulerAngles;
 
     instantiatedProjectile.velocity = ConvertDegAngleToUnitVector(eulerAngles.z) * projectileSpeed;
+
+    // both work
+    // GetComponent<AudioSource>()?.Play();
+    SfxManager.PlayBubble();
   }
 
 }
