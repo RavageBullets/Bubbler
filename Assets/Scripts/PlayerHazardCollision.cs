@@ -6,5 +6,8 @@ public class PlayerHazardCollision : MonoBehaviour {
     if (c.gameObject.tag == "Hazard") {
       this.gameObject.GetComponent<PlayerManager>().Die();
     }
+    if (c.gameObject.tag == "Platform") {
+      SfxManager.PlayBump();
+    }
   }
 }

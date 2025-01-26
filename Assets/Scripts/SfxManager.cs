@@ -28,7 +28,7 @@ public class SfxManager : MonoBehaviour {
         DontDestroyOnLoad(this.gameObject);
     }
     private void OnEnable() {
-        Debug.Log("OnEnable");
+        // Debug.Log("OnEnable");
         if (Instance != null && Instance != this) {
             Destroy(this);
             return;

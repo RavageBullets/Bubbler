@@ -1,6 +1,9 @@
+using System.Collections;
 using UnityEngine;
 
 public class StartGamePortal : MonoBehaviour {
+
+  public GameObject howToPlayUi;
 
   public void OnTriggerEnter2D(Collider2D other) {
     Collider2D[] colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), 5f);
@@ -12,9 +15,15 @@ public class StartGamePortal : MonoBehaviour {
       }
     }
 
-    if (playerCount == GameManager.instance.PlayerList.Count) {
-      GameManager.instance.StartCoroutine("NextLevel");
+    if (playerCount == GameManager.instance.PlayerList.Count && playerCount > 1) {
+      StartCoroutine("BeginGame");
     }
+  }
+
+  private IEnumerator BeginGame() {
+    howToPlayUi.SetActive(true);
+    yield return new WaitForSeconds(3);
+    GameManager.instance.StartCoroutine("NextLevel");
   }
 
 }
