@@ -16,5 +16,7 @@ public class GrenadeLauncherGun : AbstractWeapon {
     dieConditions.timeToLiveSeconds = float.PositiveInfinity;
 
     Grenade grenade = instantiatedProjectile.transform.GetComponent<Grenade>();
+
+    GetComponent<AudioSource>()?.Play();
   }
 }
