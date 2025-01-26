@@ -30,6 +30,7 @@ public class WeaponInventory : MonoBehaviour {
 
     AbstractWeapon newWeapon = Instantiate(currentWeapon, transform);
     newWeapon.playerInput = playerInput;
+    playerInput.GetComponent<PlayerManager>().EquipWeapon(newWeapon);
   }
 
   private void DropCurrentWeapon() {
