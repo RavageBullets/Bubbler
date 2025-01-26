@@ -52,7 +52,7 @@ public class MusicManager : MonoBehaviour {
     public static void PlayVictory() {
         AudioSource _as = Instance.GetComponent<AudioSource>();
         _as.loop = false;
-        _as.clip = Instance.defeatClip;
+        _as.clip = Instance.victoryClip;
         _as.Play();
     }
 
