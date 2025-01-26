@@ -17,6 +17,7 @@ public class Teleport : MonoBehaviour {
     if (disabled) return;
     target.TemporarilyDisable();
     collider.transform.position = target.transform.Find("Exit").transform.position;
+    SfxManager.PlayDrone();
   }
 
   public void TemporarilyDisable() {

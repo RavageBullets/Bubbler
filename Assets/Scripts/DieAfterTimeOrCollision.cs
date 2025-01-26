@@ -31,7 +31,9 @@ public class DieAfterTimeOrCollision : MonoBehaviour {
           explosionCollider.gameObject.GetComponent<ApplyExplosionForce>().Explode();
       }
       Destroy(gameObject);
-      Debug.Log("Die by Popping");
+      SfxManager.PlayTinyImpact();
+    }
+    if (collision.collider.CompareTag("Player")) {
       SfxManager.PlayTinyImpact();
     }
   }

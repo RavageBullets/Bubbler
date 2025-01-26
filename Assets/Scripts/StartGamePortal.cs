@@ -4,9 +4,10 @@ using UnityEngine;
 public class StartGamePortal : MonoBehaviour {
 
   public GameObject howToPlayUi;
+  public float overlapAmount = 12f;
 
   public void OnTriggerEnter2D(Collider2D other) {
-    Collider2D[] colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), 5f);
+    Collider2D[] colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), overlapAmount);
 
     int playerCount = 0;
     foreach (Collider2D collider in colliders) {

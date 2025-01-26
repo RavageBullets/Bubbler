@@ -195,10 +195,13 @@ public class GameManager : MonoBehaviour {
       var playerDisplay = canvas.Find("PlayerDisplay");
 
       var color = winner.transform.Find("SurroundingBubble").GetComponent<SpriteRenderer>().color;
+      var staticSprite = winner.GetComponent<PlayerManager>().avatar.staticSprite;
 
       playerDisplay.gameObject.SetActive(true);
       playerDisplay.Find("Bubble").GetComponent<Image>().color = color;
+      playerDisplay.Find("Sprite").GetComponent<Image>().sprite = staticSprite;
       playerDisplay.Find("Winner").GetComponent<TMP_Text>().color = color;
+      MusicManager.PlayVictory();
     }
   }
 }
