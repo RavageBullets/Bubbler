@@ -25,7 +25,7 @@ public class MusicManager : MonoBehaviour {
     private void Start() {
         SceneManager.activeSceneChanged += ChangedActiveScene;
         if (SceneManager.GetActiveScene().name == "Main Menu") {
-            this.GetComponent<AudioSource>().clip = this.prepostClip;
+            this.GetComponent<AudioSource>().clip = this.titleClip;
             this.GetComponent<AudioSource>().Play();
         }
     }
@@ -37,6 +37,9 @@ public class MusicManager : MonoBehaviour {
             this.GetComponent<AudioSource>().clip = battleClip;
             this.GetComponent<AudioSource>().Play();
         } else if (nextName == "Main Menu") {
+            this.GetComponent<AudioSource>().clip = this.prepostClip;
+            this.GetComponent<AudioSource>().Play();
+        } else if (nextName == "Join Menu") {
             this.GetComponent<AudioSource>().clip = this.prepostClip;
             this.GetComponent<AudioSource>().Play();
         }
