@@ -31,6 +31,7 @@ public class PlayerManager : MonoBehaviour {
 
   public void SetEnabled(bool active) {
     canDie = active;
+    GetComponent<PlayerController>().movementDisabled = !active;
     foreach (Transform child in transform) {
       child.gameObject.SetActive(active);
     }

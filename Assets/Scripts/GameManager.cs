@@ -78,16 +78,15 @@ public class GameManager : MonoBehaviour {
     }
   }
 
-  public void ContinueRound ()
-  {
-    _lm = FindObjectOfType<LevelManager> ();
+  public void ContinueRound() {
+    _lm = FindObjectOfType<LevelManager>();
     if (_lm.ready) {
       // make sure all players are in appropriate starting places and ready to go.
       foreach (GameObject player in PlayerList) {
-        player.GetComponent<PlayerManager> ().SetEnabled (true);
+        player.GetComponent<PlayerManager>().SetEnabled(true);
       }
     } else {
-      Debug.Log ("Bugger");
+      Debug.Log("Bugger");
     }
   }
 
@@ -109,8 +108,11 @@ public class GameManager : MonoBehaviour {
     PauseAllPhysics();
     ShowRoundOverScreen(PlayerList.Count > 0 ? PlayerList[0] : null);
 
+
     if (PlayerList.Count > 0) {
       PlayerList[0].GetComponent<PlayerManager>().score += 1;
+      PlayerList[0].GetComponent<PlayerController>().movementDisabled = true;
+
       if (PlayerList[0].GetComponent<PlayerManager>().score >= scoreUntilNextLevel) {
         endLevel = true;
       }
@@ -158,19 +160,19 @@ public class GameManager : MonoBehaviour {
   private IEnumerator RestartLevel() {
     yield return new WaitForSeconds(3);
 
-    int index = Random.Range (0, _lm.SpawnPoints.Count);
+    int index = Random.Range(0, _lm.SpawnPoints.Count);
 
     foreach (GameObject _go in DeadPlayerList) {
-      PlayerList.Add (_go);
-      PlayerManager manager = _go.GetComponent<PlayerManager> ();
-      manager.ResetPlayer ();
-      _go.transform.position = _lm.SpawnPoints [index++];
-      _go.GetComponent<Rigidbody2D> ().velocity = Vector2.zero;
+      PlayerList.Add(_go);
+      PlayerManager manager = _go.GetComponent<PlayerManager>();
+      manager.ResetPlayer();
+      _go.transform.position = _lm.SpawnPoints[index++];
+      _go.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
       if (index == _lm.SpawnPoints.Count)
         index = 0;
     }
-    DeadPlayerList.Clear ();
-    ContinueRound ();
+    DeadPlayerList.Clear();
+    ContinueRound();
   }
 
   private void PauseAllPhysics() {
@@ -195,5 +197,4 @@ public class GameManager : MonoBehaviour {
       playerDisplay.Find("Winner").GetComponent<TMP_Text>().color = color;
     }
   }
-
 }
