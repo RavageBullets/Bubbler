@@ -9,8 +9,8 @@ We need this class because some audio clips need to be played after the GameObje
 // <!-- Boing           : H -->
 // Bubble          : Shooting                                  ✅
 // Pop             : Bubbles Die (by time)                     ✅
-// Bump            : Player hit any wall (non jelly)
-// TinyImpact      : Collision between bubble and player       
+// Bump            : Player hit any wall (non jelly)           ✅
+// TinyImpact      : Collision between bubble and player       ✅
 // Drone           : End of game????
 public class SfxManager : MonoBehaviour {
     public AudioClip popClip;
