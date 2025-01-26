@@ -10,6 +10,8 @@ public class PlayerAvatar : MonoBehaviour
     public Transform LeftAnchor;
     public Transform RightAnchor;
 
+    public Sprite staticSprite;
+
     public void UpdateInverseKinematics (Transform gunAnchorL, Transform gunAnchorR) {
         leftArmIK.GetChain(2).target = gunAnchorL;
         rightArmIK.GetChain(2).target = gunAnchorR;
