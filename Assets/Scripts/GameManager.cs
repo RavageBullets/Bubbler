@@ -22,14 +22,18 @@ public class GameManager : MonoBehaviour {
   public int scoreUntilNextLevel = 1;
 
   // minimal singleton pattern
-  private void Awake() {
-    if (instance == null) {
-      instance = this;
-      DontDestroyOnLoad(gameObject);
-    } else {
-      Destroy(gameObject);
+    void Awake() {
+        DontDestroyOnLoad(this.gameObject);
     }
-  }
+    private void OnEnable() {
+        if (instance != null && instance != this) {
+            Destroy(this.gameObject);
+            return;
+        }
+
+        instance = this;
+    }
+
 
   public void Start() {
     var levelManagerObject = GameObject.Find("Level Manager");
@@ -40,6 +44,9 @@ public class GameManager : MonoBehaviour {
 
   // Unity's Player Input Manager calls this when it creates a new player
   public void OnPlayerJoined(PlayerInput playerInput) {
+    if(playerInput.gameObject.GetComponent<LevelManager>() != null)
+      return;
+
     if (_lm.allowsPlayersToJoin) {
       AddPlayer(playerInput.gameObject);
       return;
@@ -72,7 +79,6 @@ public class GameManager : MonoBehaviour {
       int i = 0;
       foreach (GameObject player in PlayerList) {
         player.transform.position = _lm.SpawnPoints[i++];
-        Debug.Log(player);
         player.GetComponent<PlayerManager>().SetEnabled(true);
         player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         player.GetComponentInChildren<WeaponInventory>().SetWeapon(_lm.defaultWeapon);

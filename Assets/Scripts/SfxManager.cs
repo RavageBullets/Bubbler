@@ -30,7 +30,7 @@ public class SfxManager : MonoBehaviour {
     private void OnEnable() {
         // Debug.Log("OnEnable");
         if (Instance != null && Instance != this) {
-            Destroy(this);
+            Destroy(this.gameObject);
             return;
         }
 

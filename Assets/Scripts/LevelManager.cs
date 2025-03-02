@@ -25,7 +25,8 @@ public class LevelManager : MonoBehaviour {
   }
 
   public void QuitToMenu (InputAction.CallbackContext context) {
-    Debug.Log ("Quit To Menu");
+    if(context.phase != InputActionPhase.Performed)
+      return;
     // Kill off the don't destroy on load players and the gamemanager and load the first scene
     PlayerManager[] players = FindObjectsOfType<PlayerManager> ();
 
@@ -33,7 +34,7 @@ public class LevelManager : MonoBehaviour {
       Destroy (players [i].gameObject);
     }
 
-    Destroy (GameManager.instance);
+    Destroy (GameManager.instance.gameObject);
 
     SceneManager.LoadScene ("Main Menu");
   }
